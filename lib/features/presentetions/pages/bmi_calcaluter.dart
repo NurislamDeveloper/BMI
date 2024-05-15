@@ -1,12 +1,14 @@
+import 'package:bmi_calculater/features/presentetions/style.dart/answers.dart';
 import 'package:bmi_calculater/features/presentetions/style.dart/bmi_calculater_text.dart';
 import 'package:bmi_calculater/features/presentetions/style.dart/main_text.dart';
-import 'package:bmi_calculater/features/presentetions/style.dart/text_and_style_of_calculater.dart';
+import 'package:bmi_calculater/features/presentetions/widgets/calculateButtom.dart';
 import 'package:bmi_calculater/features/presentetions/widgets/female.dart';
 import 'package:bmi_calculater/features/presentetions/widgets/height.dart';
 import 'package:bmi_calculater/features/presentetions/widgets/male.dart';
 import 'package:bmi_calculater/features/presentetions/widgets/weight_and_age.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'dart:math' as math;
 
 class BmiCalculater extends StatefulWidget {
   const BmiCalculater({super.key});
@@ -125,22 +127,51 @@ class _BmiCalculaterState extends State<BmiCalculater> {
             ],
           ),
         ),
-        bottomNavigationBar: InkWell(
-          onTap: () {
-            
-          },
-          child: Container(
-            height: 73,
-            color: const Color(0xffFF0F65),
-            child: const Center(
-              child: Text(
-                Calculater.calculate,
-                style: Calculater.styleOfCal,
-              ),
-            ),
-          ),
-        ),
+        bottomNavigationBar: CalculateButtom(onTap: () { final res = weight / math.pow(weight / 100, 2);
+          if (res <= 18.0) {
+            dialogBuilder(context, AppTexts.thin);
+            print('aryk');
+          } else if (res >= 18.5 && res <= 24.9) {
+            dialogBuilder(context, AppTexts.normal);
+            print('norma');
+          } else if (res >= 25) {
+            dialogBuilder(context, AppTexts.fat);
+            print('semiz');
+          } else {
+            dialogBuilder(context, AppTexts.sorry);
+            print('joop jok');
+          }
+},),
       ),
     );
   }
+}
+
+
+
+Future<void> dialogBuilder(BuildContext context, String text) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xff0A001F),
+        // backgroundColor: AppColors.backgroundColor,
+        title: const Center(child: Text('first')),
+        content: const Text('third',
+          // style: AppTextStyle.bmiAndCalcolatorStyle,
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }, child: const Text('back'),
+          ),
+        ],
+      );
+    },
+  );
 }
