@@ -1,6 +1,6 @@
-import 'package:bmi_calculater/features/presentetions/style.dart/answers.dart';
 import 'package:bmi_calculater/features/presentetions/style.dart/bmi_calculater_text.dart';
 import 'package:bmi_calculater/features/presentetions/style.dart/main_text.dart';
+import 'package:bmi_calculater/features/presentetions/style.dart/result_text.dart';
 import 'package:bmi_calculater/features/presentetions/widgets/calculateButtom.dart';
 import 'package:bmi_calculater/features/presentetions/widgets/female.dart';
 import 'package:bmi_calculater/features/presentetions/widgets/height.dart';
@@ -127,38 +127,39 @@ class _BmiCalculaterState extends State<BmiCalculater> {
             ],
           ),
         ),
-        bottomNavigationBar: CalculateButtom(onTap: () { final res = weight / math.pow(weight / 100, 2);
-          if (res <= 18.0) {
-            dialogBuilder(context, AppTexts.thin);
-            print('aryk');
-          } else if (res >= 18.5 && res <= 24.9) {
-            dialogBuilder(context, AppTexts.normal);
-            print('norma');
-          } else if (res >= 25) {
-            dialogBuilder(context, AppTexts.fat);
-            print('semiz');
-          } else {
-            dialogBuilder(context, AppTexts.sorry);
-            print('joop jok');
-          }
-},),
+        bottomNavigationBar: CalculateButtom(
+          onTap: () {
+            final res = weight / math.pow(weight / 100, 2);
+            if (res <= 18.0) {
+              dialogBuilder(context, AppText.thin, res.roundToDouble());
+            } else if (res >= 18.5 && res <= 24.9) {
+              dialogBuilder(context, AppText.normal, res.roundToDouble());
+            } else if (res >= 25) {
+              dialogBuilder(context, AppText.fat, res.roundToDouble());
+            } else {
+              dialogBuilder(context, AppText.sorry, res.roundToDouble());
+            }
+            
+          },
+        ),
       ),
     );
   }
 }
 
-
-
-Future<void> dialogBuilder(BuildContext context, String text) {
+Future<void> dialogBuilder(BuildContext context, String text, double res) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: const Color(0xff0A001F),
-        // backgroundColor: AppColors.backgroundColor,
-        title: const Center(child: Text('first')),
-        content: const Text('third',
-          // style: AppTextStyle.bmiAndCalcolatorStyle,
+        title: const Center(child: Text(AppText.appBarTitle,style: TextStyle(color: Colors.white),)),
+        content:  Text(
+            text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 26,
+          ),
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[
@@ -166,9 +167,10 @@ Future<void> dialogBuilder(BuildContext context, String text) {
             style: TextButton.styleFrom(
               textStyle: Theme.of(context).textTheme.labelLarge,
             ),
+            child: const Text(AppText.backButton),
             onPressed: () {
               Navigator.of(context).pop();
-            }, child: const Text('back'),
+            },
           ),
         ],
       );
